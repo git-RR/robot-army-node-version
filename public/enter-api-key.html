@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+    <title>API Key</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body class="bg-dark text-white">
+    <div class="container-fluid vh-100 d-sm-flex text-center justify-content-center flex-sm-column">
+        <h2>Please enter a valid API key.</h2>
+        <p>(for demo purposes, just click submit)</p>
+        <form>
+            <input type="email" id="apiKey" name="apiKey" class="text-center">
+            <button id="submitApiKey" class="border-white bg-white fw-bold">Submit</button>
+        </form>
+    </div>
+
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        let rootPath = "https://mysite.itvarsity.org/api/ContactBook/"
+        document.getElementById("submitApiKey").addEventListener('click', setApiKey)
+        
+        function setApiKey(e){
+            e.preventDefault()
+
+            //apiKey = document.getElementById("apiKey").value
+            // fetch(rootPath+"controller/api-key/?apiKey="+apiKey)
+            // .then(function (response){
+            //     return response.text()
+            // })
+            // .then(function (data){
+            //     if(data == "1"){
+            //         localStorage.setItem("apiKey", apiKey)
+            //         window.open("index.html","_self")
+            //     }else{
+            //         alert(data + ": Invalid API key entered.")
+            //     }
+            // })
+
+            // FOR DEMO PURPOSES
+            fetch("./api_key")
+            .then((res)=>{
+                return res.text();
+            })
+            .then((data)=>{
+                const apiKey = data;
+                localStorage.setItem("apiKey", apiKey);
+                window.open("index.html","_self");
+                fetch(rootPath+"controller/api-key/?apiKey="+apiKey)
+                .then(function (response){
+                    return response.text()
+                })
+                .then(function (data){
+                    if(data == "1"){
+                        localStorage.setItem("apiKey", apiKey)
+                        window.open("index.html","_self")
+                    }else{
+                        alert(data + ": Invalid API key entered.")
+                    }
+                })
+            })
+            .catch((e)=>{
+                alert("error: "+e);
+            })
+        }
+    </script>
+</body>
+</html>

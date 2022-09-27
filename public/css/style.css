@@ -1,0 +1,59 @@
+
+.overflow-x-hidden{
+    overflow-x: hidden!important;
+}
+
+/* Floating Buttons */
+.position-fixed{
+    bottom: 30px;
+    right: 10vw;
+}
+
+/* Custom Colors */
+.custom-text-success{
+    color: #00d41e !important;
+}
+.custom-bg-success{
+    background-color: #00d41e !important;
+}
+.custom-border-success{
+    border-color: #00d41e !important;
+}
+
+.custom-text-danger{
+    color: #ff2222 !important;
+}
+.custom-bg-danger{
+    background-color: #ff2222 !important;
+}
+.custom-border-danger{
+    border-color: #ff2222 !important;
+}
+
+.custom-text-primary{
+    color: #1F51FF !important;
+}
+.custom-bg-primary{
+    background-color: #1F51FF !important;
+}
+.custom-border-primary{
+    border-color: #1F51FF !important;
+}
+
+.custom-text-secondary{
+    color: #ff5f15 !important;
+}
+.custom-bg-secondary{
+    background-color: #ff5f15 !important;
+}
+.custom-border-secondary{
+    border-color: #ff5f15 !important;
+}
+
+#editContactBtn, #submitForm, #btnAddContact{
+    border: 0.2rem solid!important;
+}
+
+#deleteContactBtn, #cancelBtn, #btnCancelAdd{
+    border: 0.2rem solid!important;
+}

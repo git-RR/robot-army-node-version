@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Robot Army</title>
+        <link rel="icon" type="image/x-icon/png" href="./favicon.png">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body class="bg-dark text-light" onload="fetchContacts()">
+
+        <div class="container-fluid text-center overflow-x-hidden">
+            <div class="row">
+                <h2 class="fw-lighter my-3 col-md-12 col-lg-6 text-center px-5">Contact List</h2>
+            </div>
+
+            <section class="row">
+                <div id="table" class="col-md-6 ms-sm-3 ms-md-5">
+                    <div style="height:50vh">
+                        <i class="fa-solid fa-cloud fa-5x fa-beat-fade position-relative top-50"></i>
+                    </div>
+                </div>
+                <div id="infobox" class="col-6 position-fixed top-0 end-0">
+                </div>
+            </section>
+
+            <div class="position-fixed">
+                <div class="row">
+                    <div class="col">
+                        <button id="refresh" type="button" 
+                                class="btn bg-transparent text-white border-white rounded-circle"
+                                style="height:50px;width:50px">
+                            <i class="fa fa-sync fs-4" style="margin-top:3px"></i>
+                        </button>
+                        <button id="addContact" type="button"
+                                data-bs-toggle="modal" data-bs-target="#addContactModal"
+                                class="btn bg-transparent text-white border-white rounded-circle mx-2"
+                                style="height:50px;width:50px">
+                            <i class="fa fa-add fs-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content pb-4 bg-dark">
+                    <div class="modal-header">
+                        <h2 class="modal-title fw-lighter" id="infoModalLabel">Contact Info</h2>
+                        <button type="button" id="infoModalCloseBtn" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="info-modal-body text-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content pb-4 bg-dark">
+                <div class="modal-header">
+                  <h5 class="modal-title fw-lighter" id="addContactModalLabel">Add Contact</h5>
+                  <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="add-modal-body text-center">
+                    <div class="container-fluid mt-3">
+                        <div class="row mt-3">
+                            <div id="addAvatarImage" class="col-12">
+                                <img src="./defaultImage.png" class="col-4 mx-auto">
+                            </div>
+                        </div>
+                        <form id="addForm" class="row mt-3">
+                            <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="firstname">First name</label>
+                            <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center' name="firstname" type="text" id="firstnameNew">
+                            <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="lastname">Last name</label>
+                            <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center' name="lastname" type="text" id="lastnameNew">
+                            <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="mobile">Mobile</label>
+                            <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center' name="mobile" type="text" id="mobileNew">
+                            <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="email">Email</label>
+                            <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center' name="email" type="text" id="emailNew">
+                            <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="avatar" id="avatarLabel" hidden>Avatar</label>
+                            <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center' name="avatar" type="file" id="avatarNew" onchange='updateImg(this, "addAvatarImage")' hidden>
+                            <div class="row px-0 mx-auto">
+                                <div id="formSubmit" class="col-6 mt-4 text-end">
+                                    <button id="btnAddContact" type="submit" class="rounded-circle fs-3 px-2 custom-text-success bg-dark custom-border-success"><i class="fa-solid fa-check"></i></button>
+                                </div>
+                                <div id="formCancel" class="col-6 mt-4 text-start">
+                                    <button id="btnCancelAdd" type="button" class="rounded-circle fs-3 px-2 custom-text-danger bg-dark custom-border-danger"><i class="fa-solid fa-x"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <script src="js/config.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            console.log("API_KEY: "+apiKey);
+            document.getElementById("refresh").addEventListener('click', fetchContacts)
+            document.getElementById("addContact").addEventListener('click', addContact)
+            document.querySelector('#addAvatarImage>img').addEventListener('click', () => {
+                document.getElementById('avatarNew').click()
+            })
+            document.getElementById('btnCancelAdd').addEventListener('click', () => {
+                document.querySelector('#addContactModal .btn-close').click()
+                resetStyle(avatarNew, firstnameNew, lastnameNew, mobileNew, emailNew)
+            })
+            document.getElementById('btnAddContact').addEventListener('click', submitAddContactForm)
+            
+            const newCriteriaSym = "__";
+            const databaseLimit = 50
+            const newEntries = 10
+            const avatarNew = document.querySelector('#addAvatarImage>img')
+            const firstnameNew = document.getElementById('firstnameNew')
+            const lastnameNew = document.getElementById('lastnameNew')
+            const mobileNew = document.getElementById('mobileNew')
+            const emailNew = document.getElementById('emailNew')
+            const bsBorderStyle = firstnameNew.style.border
+            const infobox = document.getElementById('infobox')
+            const outputInfoHTML = `
+                <div class="container-fluid mt-3">
+                    
+                    <div class="row mt-3">
+                        <div id="avatarImage" class="col-12">
+                            <img src="./defaultImage.png" class="col-4 mx-auto">
+                        </div>
+                    </div>
+                    <form id="editForm" class="row mt-3">
+                        <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="firstname">First name</label>
+                        <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center text-sm-start' name="firstname" type="text" id="firstname" readonly>
+                        <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="lastname">Last name</label>
+                        <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center text-sm-start' name="lastname" type="text" id="lastname" readonly>
+                        <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="mobile">Mobile</label>
+                        <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center text-sm-start' name="mobile" type="text" id="mobile" readonly>
+                        <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="email">Email</label>
+                        <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center text-sm-start' name="email" type="text" id="email" readonly>
+                        <label class='col-8 col-sm-4 mx-auto mx-sm-0 text-sm-end mt-2 mt-sm-0 fw-semibold' for="avatar" id="avatarLabel" hidden>Change profile image</label>
+                        <input class='col-8 col-sm-6 mx-auto mx-sm-0 mb-sm-3 text-center text-sm-start' name="avatar" type="file" id="avatar" onchange="updateImg(this, 'avatarImage')" hidden>
+                        <div class="row px-0 mx-auto">
+                            <div id="formBtn1" class="col-6 mt-4 text-end">
+                                <button id="editContactBtn" type="button" onclick='editContact(true)' class="rounded-circle fs-3 px-2 custom-text-success custom-border-success bg-dark"><i class="fa-solid fa-pencil"></i></button>
+                            </div>
+                            <div id="formBtn2" class="col-6 mt-4 text-start">
+                                <button id="deleteContactBtn" type="button" onclick='deleteContact()' class="rounded-circle fs-3 px-2 custom-text-danger custom-border-danger bg-dark"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            `
+
+            let lgScreen = window.innerWidth>1000   // large screen check
+            let currentID = 0                       // id of clicked contact
+            let invalidID = -1                      // id of contact on database that fails validation
+
+            if (lgScreen) {
+                // on large screen: display on side panel
+                infobox.innerHTML = `<h2 class="fw-lighter my-3">Contact Info</h2>`
+                infobox.innerHTML += outputInfoHTML 
+            }else{
+                // on mobile view: remove side panel
+                infobox.style = 'width: 0!important; padding:0;'    
+                document.getElementById('table').classList.replace('col-md-6','col-md-12')
+                document.querySelector('#infoModal .info-modal-body').innerHTML = outputInfoHTML
+            }
+            // view or edit contact elements
+            const avatar = document.querySelector('#avatarImage>img')
+            const firstname = document.getElementById('firstname')
+            const lastname = document.getElementById('lastname')
+            const mobile = document.getElementById('mobile')
+            const email = document.getElementById('email')
+
+            function fetchContacts(){
+                /*
+                    Desc:   uses fetch to get data from api; converts response to json
+                    Input:  uses rootPath from config.js
+                    Output: displayOutput() - call to display data from api
+                            disableBtn() - call to enable edit/delete buttons when api returns data or error on fetch
+                            update DOM - add link, after contacts, for user to add random contacts
+                            populateDB() - passing number of contacts to disable link when limit reached;
+                    Called By: <body> onload; submitForm(); deleteContact(); submitAddContactForm()
+                */
+                fetch(rootPath+"controller/get-contacts/")
+                .then(function(response){
+                    return response.json()
+                })
+                .then(function(data){
+                    console.log(data)
+                    displayOutput(data)
+                    disableBtn(false)
+                    document.getElementById('table').innerHTML += `
+                        <div style="${(window.innerWidth>575)?'margin-left:-5rem':''}" class='pb-3'>
+                            <h4 id="populateDbLink" onclick="getTestData()" class='mb-5 mt-3 pb-5'>
+                                Click for Friends
+                            </h4>
+                        </div>
+                    `
+                    populateDB(data.length)
+                })
+                .catch(function(error){
+                    console.log("fetchContacts Error: "+error)
+                    document.getElementById('table').innerHTML = `
+                        <div style="${(window.innerWidth>575)?'margin-left:-5rem':''}">
+                            <h3 class='fa-fade mt-4'>No Contacts To Display</h3>
+                            <h4 id="populateDbLink" onclick="getTestData()" class='my-5'>Click for Friends</h4>
+                        </div>
+                    `
+                    disableBtn(true)  
+                })
+            }
+
+            function disableBtn(disable){
+                /*
+                    Desc:   disables or enables edit and delete buttons; changes style of buttons accordingly
+                    Input:  takes single boolean parameter: true - disables buttons;
+                    Output: displayOutput() - call to display data from api
+                    Called By:  fetchContacts()
+                */
+                document.querySelector('#formBtn1>button').disabled = disable
+                document.querySelector('#formBtn2>button').disabled = disable
+                if(disable){
+                    document.querySelector('#formBtn1>button').classList.replace('custom-text-success','text-secondary')
+                    document.querySelector('#formBtn1>button').classList.replace('custom-border-success','border-secondary')
+                    document.querySelector('#formBtn2>button').classList.replace('custom-text-danger','text-secondary')
+                    document.querySelector('#formBtn2>button').classList.replace('custom-border-danger','border-secondary')
+                }else{
+                    document.querySelector('#formBtn1>button').classList.replace('text-secondary','custom-text-success')
+                    document.querySelector('#formBtn1>button').classList.replace('border-secondary','custom-border-success')
+                    document.querySelector('#formBtn2>button').classList.replace('text-secondary','custom-text-danger')
+                    document.querySelector('#formBtn2>button').classList.replace('border-secondary','custom-border-danger')
+                }
+            }
+
+            function displayOutput(data){
+                /*
+                    Desc:   displays contacts in grid format
+                    Input:  json data; invalidID; currentID; table; lgscreen
+                    Output: dbContactInvalid() - each entry in json data passed to be checked before display
+                            invalidID - updated with id of invalid contact on database, if found
+                            deleteContact() - call to delete invalid contact on db
+                            getContact() - display single contact in side panel
+                            formatText() - format name before display
+                            table - display contacts
+                    Called By:  fetchContacts()
+                */
+                const table = document.getElementById('table')
+                let lastname=''
+                let firstname=''
+                let output = `<div class="row justify-content-center justify-content-sm-start">`
+                let colSize = 'col-3'
+
+                if (window.innerWidth<270) {
+                    colSize = 'col-5'
+                }
+
+                mainLoop: for(a in data){
+                    lastname = data[a].lastname
+                    firstname = data[a].firstname
+                    
+                    let failNewCriteriaFlag = false
+                    
+                    if(failNewCriteria(data[a].email)){
+                        failNewCriteriaFlag = true;
+                    }
+
+                    if(failNewCriteriaFlag || dbContactInvalid(data[a])){
+                        invalidID = data[a].id
+                        deleteContact()     // delete invalid contact
+                        invalidID = -1
+                        continue mainLoop   // skip this iteration
+                    }
+                    data[a].email = removeIdentifier(data[a].email)
+                    if(currentID!==0){getContact(currentID)} // on lgscreen, display current contact in side panel
+                    
+                    output += `
+                            <div class="${colSize} col-sm-2 m-1" onclick="getContact(${data[a].id})">
+                                <img src="${rootPath}controller/uploads/${data[a].avatar}" width="60">
+                                <p class="m-0 p-0">${formatText(firstname)}</p>
+                                <p class="m-0 p-0">${formatText(lastname)}</p>
+                                ${(lgScreen)?``:`
+                                <button type="button" class="btn h-100" data-bs-toggle="modal" data-bs-target="#infoModal"
+                                    style="color: transparent; background: rgba(0,0,0,0); margin-top: -8rem">
+                                    Click for contact info
+                                </button>`
+                                }
+                            </div>                 
+                    `
+                }
+                output += `</div>`
+                table.innerHTML = output
+                if(lgScreen && currentID===0){
+                    getContact(data[0].id)
+                }
+            }
+
+            function failNewCriteria(text){
+                if(!text.endsWith(newCriteriaSym)){
+                    console.log(text+'FAILED')
+                    return true
+                }
+                return false
+            }
+
+            function removeIdentifier(text){
+                if(text.endsWith(newCriteriaSym)){
+                    return (text.slice(0, text.length-newCriteriaSym.length))
+                }
+                return text
+            }
+
+            function dbContactInvalid(contact){
+                /*
+                    Desc:   check if contact from database is valid before proceeding; when invalid, return true
+                    Input:  single contact in json; 
+                            inputValid() - checks all values are valid
+                    Output: set - form input values
+                    Called By:  displayOutput()
+                */
+                
+                window.firstname.value = contact.firstname
+                window.lastname.value = contact.lastname
+                window.mobile.value = contact.mobile
+                window.email.value = contact.email
+                if (inputValid(window.firstname, window.lastname, mobile, email)) {
+                    return false    // valid
+                } else {
+                    return true     // invalid
+                }
+            }
+
+            function formatText(text){
+                /*
+                    Desc:   format text to prevent text-overlap during display
+                    Input:  string
+                    Output: return - first word of string or shortened form, based on screen size
+                    Called By:  displayOutput()
+                */
+                let initial = text[0].toUpperCase()
+                if (window.innerWidth<300) {
+                    return initial+text.slice(1,4)
+                }else{
+                    return initial+text.split('-',1)[0].slice(0).split(' ',1)[0].slice(1) 
+                }
+            }
+
+            function addContact(){
+                /*
+                    Desc:   clear add contact form 
+                    Called By:  button addContact onclick
+                */
+                document.getElementById('addForm').reset()
+            }
+
+            function getContact(id){
+                /*
+                    Desc:   fetch a single contact with specified id from database
+                    Input:  id
+                    Output: currentID - set currentID to id passed in
+                            displayOutputInfo() - display single contact information
+                    Called By:  displayOutput(); editContact()
+                */
+                currentID = id
+                fetch(rootPath+'controller/get-contacts/?id=' + id)
+                .then(function(response){
+                    return response.json()
+                })
+                .then(function(data){
+                    displayOutputInfo(data)
+                })
+                .catch(function(error){console.log("getContact Error: "+error)})
+            }
+
+            function displayOutputInfo(data){
+                /*
+                    Desc:   display single contact information
+                    Input:  data of single contact in json
+                    Output: set - form fields
+                    Called By:  getContact()
+                */
+                avatarImg = `
+                    <img src="${rootPath}/controller/uploads/${data[0].avatar}" 
+                    class="col-4 m-auto">
+                    `
+                document.getElementById("avatarImage").innerHTML = avatarImg
+                document.getElementById("firstname").value = data[0].firstname
+                document.getElementById("lastname").value = data[0].lastname
+                document.getElementById("mobile").value = data[0].mobile
+                document.getElementById("email").value = removeIdentifier(data[0].email)
+            }
+            
+            function editContact(editMode){
+                /*
+                    Desc:   change mode of form; readonly enabled or disabled
+                    Input:  boolean parameter; true is edit mode
+                    Output: resetStyle() - remove styling from input validation when edit is cancelled
+                            getContact() - load new data when contact edited; reload data when edit cancelled
+                    Called By:  <button> editContactBtn onclick; submitForm(); editContact()
+                */
+                const editBtn   = `<button id="editContactBtn" type="button" onclick='editContact(true)' class="rounded-circle fs-3 px-2 custom-text-success custom-border-success bg-dark"><i class="fa-solid fa-pencil"></i></button>`
+                const deleteBtn = `<button id="deleteContactBtn" type="button" onclick='deleteContact()' class="rounded-circle fs-3 px-2 custom-text-danger custom-border-danger bg-dark"><i class="fas fa-trash-alt"></i></button>`
+                const submitBtn = `<button id="submitForm" type="submit" class="rounded-circle fs-3 px-2 custom-text-success custom-border-success bg-dark"><i class="fa-solid fa-check"></i></button>`
+                const cancelBtn = `<button id="cancelBtn" type="button" class="rounded-circle fs-3 px-2 custom-text-danger custom-border-danger bg-dark"><i class="fa-solid fa-x"></i></button>`
+
+                document.getElementById("firstname").readOnly = !editMode
+                document.getElementById("lastname").readOnly = !editMode
+                document.getElementById("mobile").readOnly = !editMode
+                document.getElementById("email").readOnly = !editMode
+                
+                if (!editMode) {
+                    // READONLY MODE
+                    document.getElementById('formBtn1').innerHTML = editBtn
+                    document.getElementById('formBtn2').innerHTML = deleteBtn
+                    document.querySelector('#avatarImage').innerHTML = document.querySelector('#avatarImage').innerHTML
+                    document.getElementById('infoModalCloseBtn').removeEventListener('click', () => {
+                        editContact(false)
+                    })
+                    resetStyle(avatar, firstname, lastname, mobile, email)
+                }else{
+                    // EDIT MODE
+                    document.getElementById('formBtn1').innerHTML = submitBtn
+                    document.getElementById('formBtn2').innerHTML = cancelBtn
+                    document.getElementById('submitForm').addEventListener('click', submitForm)
+                    document.getElementById('cancelBtn').addEventListener('click', () => {
+                        editContact(false)
+                        getContact(currentID)   // reload data if edit is cancelled
+                    })
+                    document.getElementById('infoModalCloseBtn').addEventListener('click', () => {
+                        editContact(false)
+                    })
+                    document.querySelector('#avatarImage>img').addEventListener('click', () => {
+                        document.getElementById('avatar').click()
+                    })
+                }
+            }
+
+            function submitForm(e){
+                /*
+                    Desc:   post edited contact data to server
+                    Input:  inputValid() - check whether input is valid; if invalid, do not proceed
+                            currentID - used in post to update selected contact data
+                            apiKey - from config.js
+                    Output: cleanData() - modify form data before posting to server
+                            fetchContacts() - reload all contacts
+                            editContact() - set form to readOnly
+                    Called By:  <button> submitBtn onclick
+                */
+                e.preventDefault()
+
+                if(!inputValid(firstname, lastname, mobile, email)){
+                    return
+                }
+                cleanData("#editForm")
+
+                let id = currentID
+                const form = new FormData(document.querySelector("#editForm"))
+                form.append('apiKey', apiKey)
+                form.append('id', id)
+                //console.log(...form)
+                fetch(rootPath+'controller/edit-contact/', {
+                    method: 'POST',
+                    headers: {'Accept': 'application/json, *.*'},
+                    body: form
+                })
+                .then(function(response){
+                    return response.text()
+                })
+                .then(function(data){
+                    if(lgScreen){
+                        if(data=="1"){
+                            //alert("Contact Edited.")
+                        }else{
+                            alert(data)
+                        }
+                    }else{
+                        document.querySelector('#infoModal .btn-close').click()
+                    }
+                    fetchContacts()
+                    editContact(false)
+                })
+                .catch(function(error){console.log("editContact Error: "+error)})
+            }
+
+            function deleteContact(){
+                /*
+                    Desc:   request api delete function on selected contact
+                    Input:  currentID - used to specify contact data to delete from database
+                            invalidID - used to specify contact on database that is invalid
+                    Output: fetchContacts() - reload all contacts
+                    Called By:  displayOutput(); <button> deleteContactBtn onclick;
+                */
+                let id = currentID
+                if(invalidID!==-1){id=invalidID}
+
+                fetch(rootPath+'controller/delete-contact/?id='+id)
+                .then(function(response){
+                    return response.text()
+                })
+                .then(function(data){
+                    if (data=="1") {
+                        currentID=0
+                        fetchContacts()
+                        if(lgScreen){
+                            infobox.innerHTML = `<h2 class="fw-lighter my-3">Contact Info</h2>`
+                            infobox.innerHTML += outputInfoHTML
+                        }else{
+                            document.querySelector('#infoModal .btn-close').click()
+                        }
+                    }else{
+                        if(lgScreen){
+                            alert(data)
+                        }
+                    }
+                })
+                .catch(function(error){console.log("deleteContact Error: "+error)})
+            }
+
+            async function submitAddContactForm(e){
+                /*
+                    Desc:   post new contact data to server
+                    Input:  inputValid() - check whether input is valid; if invalid, do not proceed
+                            currentID - used in post to update selected contact data
+                            apiKey - from config.js
+                    Output: cleanData() - modify form data before posting to server
+                            setDefaultImg() - set avatar when user does not select file
+                            fetchContacts() - reload all contacts
+                    Called By:  <button> btnAddContact onclick
+                */
+                
+                e.preventDefault()
+                if(!inputValid(firstnameNew,lastnameNew,mobileNew,emailNew)){
+                    return
+                }
+                cleanData()
+
+                const form = new FormData(document.querySelector('#addForm'))
+                form.append('apiKey', apiKey)
+
+                for([key, value] of form.entries()){
+                    if(key==='avatar'&&value.name===''){
+                        await setDefaultImg(form)
+                    }
+                }
+
+                fetch(rootPath + 'controller/insert-contact/', {
+                    method: 'POST',
+                    headers: {'Accept':'application/json, *.*'},
+                    body: form
+                })
+                .then(function(response){
+                    return response.text()
+                })
+                .then(function(data){
+                    fetchContacts()
+                    document.querySelector('#addContactModal .btn-close').click()
+                    if (data == "1") {
+                        //alert("Contact added.")
+                    }else{
+                        alert(data)
+                    }
+                    document.querySelector('#addAvatarImage > img').src = "./defaultImage.png"
+                })
+                .catch(function(error){console.log("AddContact Error: "+error)})
+            }
+
+            function updateImg(file, id){
+                /*
+                    Desc:   update image displayed on screen with image selected by user
+                    Input:  file - selected by user; id - of element container of image
+                    Output: image source - set to url of file
+                    Called By:  <input> avatar onchange
+                */
+                file = file.files[0]
+                url = URL.createObjectURL(file)
+                document.querySelector('#'+id+' > img').src =  url
+            }
+
+            async function setDefaultImg(form){
+                /*
+                    Desc:   set a default image to new contact when user does not select an image
+                    Input:  form - data of new contact
+                    Output: form - new file appended as avatar image
+                    Called By:  submitAddContactForm()
+                */
+                response = await fetch(`https://robohash.org/${Math.floor(Math.random() * 10001)}`)
+                blob = await response.blob()
+                    let file = new File([blob],'image.png',{
+                        lastModified: 1654443013251,
+                        lastModifiedDate: new Date,
+                        name: 'newfile.png',
+                        size: this.size,
+                        type: "image/png",
+                        webkitRelativePath: ""
+                    })
+                    form.append('avatar', file)
+            }
+
+            // START input validation
+            function inputValid(f,l,m,e){
+                /*
+                    Desc:   check whether data is valid; return true when valid
+                    Input:  elements holding data to be sent to server
+                    Output: return boolean
+                    Called By:  submitForm(); submitAddContactForm(); dbContactInvalid()
+                */
+                let flagValid = true
+                if(nameInvalid(f)){flagValid=false}
+                if(nameInvalid(l)){flagValid=false}
+                if(mobileInvalid(m)){flagValid=false}
+                if(emailInvalid(e)){flagValid=false}
+                return flagValid
+            }
+
+            function nameInvalid(name){
+                /*
+                    Desc:   check whether name is valid
+                    Input:  string
+                    Output: update document style when invalid; return boolean - true when invalid
+                    Called By:  inputValid()
+                */
+                let checkName = name.value
+                let borderStyle = name.style.border
+                if(checkName.length<3){
+                    name.style = 'border-color: red'
+                    return true
+                }
+                name.style = borderStyle
+                return false
+            }
+
+            function mobileInvalid(mobile){
+                /*
+                    Desc:   check whether phone number is valid
+                    Input:  string
+                    Output: update document style when invalid; return boolean - true when invalid
+                    Called By:  inputValid()
+                */
+                let borderStyle = mobile.style.border
+                let phoneNum = mobile.value
+                let symbolArr = ['+',' ','-',',','(',')']
+                symbolArr.forEach(sym => {                      // remove all common symbols
+                    phoneNum = phoneNum.replaceAll(sym,'')
+                })
+                if(phoneNum.length<8 || isNaN(phoneNum)){
+                    mobile.style = 'border-color: red'
+                    return true
+                }
+                mobile.style = borderStyle
+                return false
+            }
+            
+            function emailInvalid(email){
+                /*
+                    Desc:   check whether email is valid
+                    Input:  string
+                    Output: update document style when invalid; return boolean - true when invalid
+                    Called By:  inputValid()
+                */
+                let borderStyle = email.style.border
+                let checkEmail = email.value
+                let symbolArr = ['@','#','$','%','&','*']
+                let indexAt = checkEmail.indexOf(symbolArr[0])
+                if(
+                    checkEmail.length<5 
+                    || indexAt===-1 
+                    || indexAt===0 
+                    || indexAt===(checkEmail.length-1)
+                ){  
+                    email.style = 'border-color: red'
+                    return true
+                }
+                for(let i=1;i<symbolArr.length;i++){
+                    if (checkEmail.indexOf(symbolArr[i])!==-1) {
+                        email.style = 'border-color: red'
+                        return true
+                    }
+                }
+                email.style = borderStyle
+                return false
+            }
+
+            function resetStyle(a,f,l,m,e){
+                /*
+                    Desc:   reset form style to default when validation cancelled
+                    Input:  form elements
+                    Output: update document elements' style
+                    Called By:  editContact(); <button> btnCancelAdd onclick
+                */
+                a.src = './defaultImage.png'
+                f.style.border = bsBorderStyle
+                l.style.border = bsBorderStyle
+                m.style.border = bsBorderStyle
+                e.style.border = bsBorderStyle
+            }
+
+            function cleanData(eid){
+                /*
+                    Desc:   remove all spaces from around input data
+                    Input:  id - of specific contact data
+                    Output: values - spaces removed with modifying information
+                    Called By:  submitForm(); submitAddContactForm(); getTestData()
+                */
+                if(eid==='#editForm'){
+                    firstname.value = firstname.value.trim()
+                    lastname.value = lastname.value.trim()
+                    mobile.value =mobile.value.trim().replaceAll(' ','')
+                    email.value = email.value.trim().replaceAll(' ','')
+
+                    // firstname.value = addNewCriteriaSym(firstname.value)
+                    // lastname.value = addNewCriteriaSym(lastname.value)
+                    // mobile.value = addNewCriteriaSym(mobile.value)
+                    email.value = addNewCriteriaSym(email.value)
+                }else{
+                    firstnameNew.value = firstnameNew.value.trim()
+                    lastnameNew.value = lastnameNew.value.trim()
+                    mobileNew.value =mobileNew.value.trim().replaceAll(' ','')
+                    emailNew.value = emailNew.value.trim().replaceAll(' ','')
+
+                    // firstnameNew.value = addNewCriteriaSym(firstnameNew.value)
+                    // lastnameNew.value = addNewCriteriaSym(lastnameNew.value)
+                    // mobileNew.value = addNewCriteriaSym(mobileNew.value)
+                    emailNew.value = addNewCriteriaSym(emailNew.value)
+                }
+            }
+            // END input validation
+
+            function addNewCriteriaSym(text){
+                return text+newCriteriaSym
+            }
+
+            // START populate database with test data
+            function populateDB(length){
+                // when database has more than limit entries, disable getTestData, to prevent errors
+                if(length>=databaseLimit){
+                    document.getElementById('populateDbLink').style = 'color: #ff2222!important;'
+                    document.getElementById('populateDbLink').innerText = 'Contact Book Full'
+                    document.getElementById('populateDbLink').onclick = ""
+                }else{
+                    document.getElementById('populateDbLink').innerText = 'Click for Friends'
+                    document.getElementById('populateDbLink').style = 'color: #37ff14bd!important;'
+                    document.getElementById('populateDbLink').onclick.append = "getTestData()"
+                }
+            }
+
+            function getTestData(){
+                fetch(`https://random-data-api.com/api/users/random_user?size=${newEntries}`)
+                .then(function(response){
+                    return response.json()
+                })
+                .then(function(data){   
+                    for(i in data){
+                        firstnameNew.value = data[i]['first_name']
+                        lastnameNew.value = data[i]['last_name']
+                        mobileNew.value = data[i]['phone_number'].slice(0,14).replaceAll('.','').replaceAll('-','')
+                        emailNew.value = data[i]['email']
+                        cleanData()
+                        
+                        const form = new FormData(document.querySelector('#addForm'))
+                        form.append('apiKey', apiKey)
+
+                        fetch(data[i]['avatar'])
+                        .then(function(resp){
+                            return resp.blob()
+                        })
+                        .then(function(blob){
+                            let file = new File([blob],'image.png',{
+                                lastModified: 1654443013251,
+                                lastModifiedDate: new Date,
+                                name: 'newfile.png',
+                                size: this.size,
+                                type: "image/png",
+                                webkitRelativePath: ""
+                            })
+                            form.append('avatar', file)
+                            fetch(rootPath + 'controller/insert-contact/', {
+                                method: 'POST',
+                                headers: {'Accept':'application/json, *.*'},
+                                body: form
+                            })
+                            .then(function(response){
+                                return response.text()
+                            })
+                            .then(function(data){
+                                // if (data == "1") {console.log("Contact added.")}
+                                // else{console.log(data)}
+                                document.getElementById("refresh").click()
+                            })
+                        })    
+                    }
+                })
+                .catch(function(error){console.log("getTestData Error: "+error)})
+            }
+            // END populate database
+
+        </script>
+    </body>
+</html>

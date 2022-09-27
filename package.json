@@ -1,0 +1,21 @@
+{
+  "name": "robot-army",
+  "version": "1.0.0",
+  "description": "app stores contact information",
+  "main": "index.js",
+  "scripts": {
+	"start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "fetch",
+    "api",
+    "contact-book"
+  ],
+  "author": "devel-rr",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
