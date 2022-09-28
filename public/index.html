@@ -102,7 +102,6 @@
         <script src="js/config.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script>
-            console.log("API_KEY: "+apiKey);
             document.getElementById("refresh").addEventListener('click', fetchContacts)
             document.getElementById("addContact").addEventListener('click', addContact)
             document.querySelector('#addAvatarImage>img').addEventListener('click', () => {
@@ -114,7 +113,7 @@
             })
             document.getElementById('btnAddContact').addEventListener('click', submitAddContactForm)
             
-            const newCriteriaSym = "__";
+            const newCriteriaSym = "__"
             const databaseLimit = 50
             const newEntries = 10
             const avatarNew = document.querySelector('#addAvatarImage>img')
@@ -191,7 +190,7 @@
                     return response.json()
                 })
                 .then(function(data){
-                    console.log(data)
+                    //console.log(data)
                     displayOutput(data)
                     disableBtn(false)
                     document.getElementById('table').innerHTML += `
@@ -301,7 +300,7 @@
 
             function failNewCriteria(text){
                 if(!text.endsWith(newCriteriaSym)){
-                    console.log(text+'FAILED')
+                    //console.log(text+' FAILED')
                     return true
                 }
                 return false
@@ -373,7 +372,7 @@
                 .then(function(data){
                     displayOutputInfo(data)
                 })
-                .catch(function(error){console.log("getContact Error: "+error)})
+                .catch(function(error){console.log("get contact Error: "+error)})
             }
 
             function displayOutputInfo(data){
@@ -483,7 +482,7 @@
                     fetchContacts()
                     editContact(false)
                 })
-                .catch(function(error){console.log("editContact Error: "+error)})
+                .catch(function(error){console.log("edit contact Error: "+error)})
             }
 
             function deleteContact(){
@@ -517,7 +516,7 @@
                         }
                     }
                 })
-                .catch(function(error){console.log("deleteContact Error: "+error)})
+                .catch(function(error){console.log("delete contact Error: "+error)})
             }
 
             async function submitAddContactForm(e){
@@ -565,7 +564,7 @@
                     }
                     document.querySelector('#addAvatarImage > img').src = "./defaultImage.png"
                 })
-                .catch(function(error){console.log("AddContact Error: "+error)})
+                .catch(function(error){console.log("add contact Error: "+error)})
             }
 
             function updateImg(file, id){
@@ -737,17 +736,22 @@
             function populateDB(length){
                 // when database has more than limit entries, disable getTestData, to prevent errors
                 if(length>=databaseLimit){
-                    document.getElementById('populateDbLink').style = 'color: #ff2222!important;'
+                    document.getElementById('populateDbLink').style.color = '#ff2222'
                     document.getElementById('populateDbLink').innerText = 'Contact Book Full'
                     document.getElementById('populateDbLink').onclick = ""
                 }else{
+                    document.getElementById('populateDbLink').style.color = '#37ff14bd'
                     document.getElementById('populateDbLink').innerText = 'Click for Friends'
-                    document.getElementById('populateDbLink').style = 'color: #37ff14bd!important;'
                     document.getElementById('populateDbLink').onclick.append = "getTestData()"
                 }
             }
 
             function getTestData(){
+
+                document.getElementById('populateDbLink').style.color = 'grey'
+                document.getElementById('populateDbLink').innerText = 'Adding contacts...'
+                document.getElementById('populateDbLink').onclick = ""
+
                 fetch(`https://random-data-api.com/api/users/random_user?size=${newEntries}`)
                 .then(function(response){
                     return response.json()
@@ -793,7 +797,7 @@
                         })    
                     }
                 })
-                .catch(function(error){console.log("getTestData Error: "+error)})
+                .catch(function(error){console.log("load test data Error: "+error)})
             }
             // END populate database
 
