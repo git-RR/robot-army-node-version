@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="container d-flex vh-100 bg-dark align-items-center justify-content-center">
+
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content pb-4 bg-dark">
+                <div class="modal-header">
+                    <h2 class="modal-title fw-lighter text-light" id="helpModalLabel">help menu</h2>
+                    <button type="button" id="helpModalCloseBtn" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center text-light">
+                    <h3 class="fw-lighter"><i class="fa fa-eye fs-3"></i> Viewing</h3>
+                    <p>To view a contact simply click on the contact's name or profile pic.</p>
+                    <h3 class="fw-lighter"><i class="fa fa-plus fs-3"></i> Adding</h3>
+                    <p>To add a contact, click on the plus button at the bottom right of the screen and fill in the details.</p>
+                    <h3 class="fw-lighter"><i class="fa fa-pencil fs-3"></i> Editing</h3>
+                    <p>To edit a contact, click on the contact's name or profile pic. Then click on the pencil icon to enter edit mode. After changes have been made, click the check icon to save or cross icon to cancel.</p>
+                    <h3 class="fw-lighter"><i class="fa fa-trash fs-3"></i> Deleting</h3>
+                    <p>To delete a contact, click on the contact's name or profile pic. Then click on the trash can icon to delete it.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Prev</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="btnHelp" type="button"
+            data-bs-toggle="modal" data-bs-target="#helpModal"
+            class="btn bg-transparent text-white border-white rounded-circle mx-2"
+            style="height:50px;width:50px">
+        <i class="fa fa-question fs-3"></i>
+    </button>
+
+    <script src="js/help.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

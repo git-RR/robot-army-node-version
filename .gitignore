@@ -1,1 +1,5 @@
 node_modules/
+dev/css
+dev/fontawesome
+dev/js/bootstrap.min.js
+dev/js/config.js
