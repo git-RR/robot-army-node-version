@@ -11,11 +11,11 @@
 </head>
 <body class="container d-flex vh-100 bg-dark align-items-center justify-content-center">
 
-    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalMenu" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content pb-4 bg-dark">
                 <div class="modal-header">
-                    <h2 class="modal-title fw-lighter text-light" id="helpModalLabel">help menu</h2>
+                    <h2 class="modal-title fw-lighter text-light" id="helpModalMenu"><span id="helpMenuBtn" class="border-bottom" role="button">help menu</span><span id="helpSubMenu"></span></h2>
                     <button type="button" id="helpModalCloseBtn" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-light text-center text-sm-start">
@@ -37,8 +37,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Prev</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Next</button>
+                    <button type="button" class="btn btn-secondary">Prev</button>
+                    <button type="button" class="btn btn-secondary">Next</button>
                 </div>
             </div>
         </div>
