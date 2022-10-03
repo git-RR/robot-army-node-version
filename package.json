@@ -4,7 +4,7 @@
   "description": "app stores contact information",
   "main": "index.js",
   "scripts": {
-	"start": "node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -16,6 +16,7 @@
   "author": "devel-rr",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "mongodb": "^4.10.0"
   }
 }

@@ -42,34 +42,39 @@ function reloadHelpModal(){
     const helpAdd = document.getElementById("helpAdd");
     const helpEdit = document.getElementById("helpEdit");
     const helpDelete = document.getElementById("helpDelete");
-    helpView.addEventListener('click',()=>{
+    helpView.addEventListener('click',async () => {
         helpSubMenu.innerText = " > view";
-        helpModalBody.innerHTML = helpOptions[0].view;
+        //helpModalBody.innerHTML = helpOptions[0].view;
+        const page = await getHelpPage('view');
+        //console.log(page)
+        helpModalBody.innerHTML = page.data;
         currentPage = 0;
     });
     helpAdd.addEventListener('click',()=>{
         helpSubMenu.innerText = " > add";
-        helpModalBody.innerHTML = helpOptions[1].add;
+        //helpModalBody.innerHTML = helpOptions[1].add;
         currentPage = 1;
     });
     helpEdit.addEventListener('click',()=>{
         helpSubMenu.innerText = " > edit";
-        helpModalBody.innerHTML = helpOptions[2].edit;
+        //helpModalBody.innerHTML = helpOptions[2].edit;
         currentPage = 2;
     });
     helpDelete.addEventListener('click',()=>{
         helpSubMenu.innerText = " > delete";
-        helpModalBody.innerHTML = helpOptions[3].delete;
+        //helpModalBody.innerHTML = helpOptions[3].delete;
         currentPage = 3;
     });
 }
 
+/*
 const helpOptions = [
     {"view":`<p class="px-sm-5">To view a contact simply click on the contact's name or profile pic.</p>`},
     {"add":`<p class="px-sm-5">To add a contact, click on the plus button at the bottom right of the screen and fill in the details.</p>`},
     {"edit":`<p class="px-sm-5">To edit a contact, click on the contact's name or profile pic. Then click on the pencil icon to enter edit mode. After changes have been made, click the check icon to save or cross icon to cancel.</p>`},
     {"delete":`<p class="px-sm-5">To delete a contact, click on the contact's name or profile pic. Then click on the trash can icon to delete it.</p>`},
 ];
+*/
 
 // paging through help options
 
@@ -104,3 +109,18 @@ function newPage(page){
                     currentPage=-1;
     }
 }
+
+// getting pages from database
+async function getHelpPage(page){
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({data: page}),
+    };
+    const response = await fetch("/api/help", options);
+    const json = await response.json();
+    return json;
+}
+
