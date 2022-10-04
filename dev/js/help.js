@@ -50,22 +50,35 @@ function reloadHelpModal(){
         helpModalBody.innerHTML = page.data;
         currentPage = 0;
     });
-    helpAdd.addEventListener('click',()=>{
+    helpAdd.addEventListener('click', async ()=>{
         helpSubMenu.innerText = " > add";
         //helpModalBody.innerHTML = helpOptions[1].add;
+        const page = await getHelpPage('add');
+        helpModalBody.innerHTML = page.data;
         currentPage = 1;
     });
-    helpEdit.addEventListener('click',()=>{
+    helpEdit.addEventListener('click', async ()=>{
         helpSubMenu.innerText = " > edit";
         //helpModalBody.innerHTML = helpOptions[2].edit;
+        const page = await getHelpPage('edit');
+        helpModalBody.innerHTML = page.data;
         currentPage = 2;
     });
-    helpDelete.addEventListener('click',()=>{
+    helpDelete.addEventListener('click', async ()=>{
         helpSubMenu.innerText = " > delete";
         //helpModalBody.innerHTML = helpOptions[3].delete;
+        const page = await getHelpPage('delete');
+        helpModalBody.innerHTML = page.data;
         currentPage = 3;
     });
 }
+
+let helpOptions = {
+    "view":``,
+    "add":``,
+    "edit":``,
+    "delete":``,
+};
 
 /*
 const helpOptions = [
@@ -119,8 +132,17 @@ async function getHelpPage(page){
         },
         body: JSON.stringify({data: page}),
     };
-    const response = await fetch("/api/help", options);
-    const json = await response.json();
-    return json;
+    if (helpOptions.page === ``) {
+        try{
+            const response = await fetch("/api/help", options);
+            const json = await response.json();
+            helpOptions.page = json.data;    // store locally
+            return json;
+        }catch(err){
+            console.log(err);
+        }
+    }else{
+        return {data:helpOptions.page};
+    }
 }
 
