@@ -5,12 +5,10 @@ const app = express();
 
 app.use(express.json());
 
-app.listen(5000, ()=>{console.log(`running @ ${5000}`)});
+app.listen(5001, ()=>{console.log(`running @ ${5001}`)});
 app.use(express.static("./"));
 app.post("/api/help", async (req, res)=>{
     const data = req.body.data;
-    //console.log(data);
-    //res.json({data:'message received!'});
     const html = await main(data);
     res.json({data:html});
 });
@@ -21,10 +19,9 @@ async function main(page){
     const client = new MongoClient(uri);
     try {
         await client.connect();
+        const html = await getPage(client, page);
         //await listDatabases(client);
         //await createPages(client);
-        const html = await getPage(client, page);
-        //console.log('FETCHED DATA : '+html)
         return await html;
     } catch (error) {
         console.error(error);
@@ -33,7 +30,14 @@ async function main(page){
     }
 }
 
-main().catch(console.error);
+async function getPage(client, pageName){
+    const result = await client.db("help").collection("pages").findOne({name:pageName});
+    if (result) {
+        return result.page;
+    } else {
+        console.log(pageName + " Not Found!");
+    }
+}
 
 async function listDatabases(client){
     const databasesList = await client.db().admin().listDatabases();
@@ -52,14 +56,4 @@ async function createPages(client){
     const result = await client.db("help").collection("pages").insertMany(newPages);
     console.log(`${result.insertedCount} new pages.\nID's: `);
     console.log(result.insertedIds);
-}
-
-async function getPage(client, pageName){
-    const result = await client.db("help").collection("pages").findOne({name:pageName});
-    if (result) {
-        //console.log("FOUND : "+result.page);
-        return result.page;
-    } else {
-        //console.log("NOT FOUND!");
-    }
 }

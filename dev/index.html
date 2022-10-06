@@ -13,12 +13,16 @@
 
     <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalMenu" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content pb-4 bg-dark">
+            <div class="modal-content pb-4 bg-dark"
+                style="max-height: 90vh;"
+            >
                 <div class="modal-header">
                     <h2 class="modal-title fw-lighter text-light" id="helpModalMenu"><span id="helpMenuBtn" class="border-bottom" role="button">help menu</span><span id="helpSubMenu"></span></h2>
                     <button type="button" id="helpModalCloseBtn" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-light text-center text-sm-start">
+                <div class="modal-body text-light text-center text-sm-start"
+                    style="overflow: auto;"
+                >
                     <div id="helpView" class="row align-items-center justify-content-sm-end my-2 my-sm-4" role="button">
                         <h3 class="fw-lighter col-sm-4 m-0"><i class="fa fa-eye fs-3"></i> Viewing</h3>
                         <p class="col-sm-6 my-2 m-sm-0">Click on the contact</p>
