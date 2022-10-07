@@ -57,3 +57,12 @@
 #deleteContactBtn, #cancelBtn, #btnCancelAdd{
     border: 0.2rem solid!important;
 }
+
+/* Help Modal */
+#helpModal .modal-content{
+    max-height: 90vh;
+}
+
+/* #helpModal .modal-dialog .modal-content .modal-body{
+    overflow: auto;
+} */
