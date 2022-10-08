@@ -57,3 +57,23 @@
 #deleteContactBtn, #cancelBtn, #btnCancelAdd{
     border: 0.2rem solid!important;
 }
+
+/* Help Modal */
+#helpModal .modal-content{
+    max-height: 90vh;
+}
+
+/* Custom Styles */
+
+#submitForm,
+#cancelBtn,
+#btnAddContact,
+#btnCancelAdd{
+    width: 50px!important;
+	height: 50px!important;
+}
+
+#cancelBtn,
+#btnCancelAdd{
+    padding-bottom: 3px!important;
+}

@@ -31,6 +31,12 @@
             <div class="position-fixed">
                 <div class="row">
                     <div class="col">
+                        <button id="btnHelp" type="button"
+                                data-bs-toggle="modal" data-bs-target="#helpModal"
+                                class="btn bg-transparent text-white border-white rounded-circle mx-2"
+                                style="height:50px;width:50px">
+                            <i class="fa fa-question fs-3"></i>
+                        </button>
                         <button id="refresh" type="button" 
                                 class="btn bg-transparent text-white border-white rounded-circle"
                                 style="height:50px;width:50px">
@@ -99,8 +105,43 @@
             </div>
         </div>
 
+        <!-- Modal : Help -->
+        <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalMenu" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content pb-4 bg-dark">
+                    <div class="modal-header">
+                        <h2 class="modal-title fw-lighter text-light" id="helpModalMenu"><span id="helpMenuBtn" class="border-bottom" role="button">help menu</span><span id="helpSubMenu"></span></h2>
+                        <button type="button" id="helpModalCloseBtn" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-light text-center text-sm-start">
+                        <div id="helpView" class="row align-items-center justify-content-sm-end my-2 my-sm-4" role="button">
+                            <h3 class="fw-lighter col-sm-4 m-0"><i class="fa fa-eye fs-3"></i> Viewing</h3>
+                            <p class="col-sm-6 my-2 m-sm-0">Click on the contact</p>
+                        </div>
+                        <div id="helpAdd" class="row align-items-center justify-content-sm-end my-2 my-sm-4" role="button">
+                            <h3 class="fw-lighter col-sm-4 m-0"><i class="fa fa-plus fs-3"></i> Adding</h3>
+                            <p class="col-sm-6 my-2 m-sm-0">Click on the plus button</p>
+                        </div>
+                        <div id="helpEdit" class="row align-items-center justify-content-sm-end my-2 my-sm-4" role="button">
+                            <h3 class="fw-lighter col-sm-4 m-0"><i class="fa fa-pencil fs-3"></i> Editing</h3>
+                            <p class="col-sm-6 my-2 m-sm-0">Click on the pencil icon</p>
+                        </div>
+                        <div id="helpDelete" class="row align-items-center justify-content-sm-end my-2 my-sm-4" role="button">
+                            <h3 class="fw-lighter col-sm-4 m-0"><i class="fa fa-trash fs-3"></i> Deleting</h3>
+                            <p class="col-sm-6 my-2 m-sm-0">Click on the trash can icon</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary">Prev</button>
+                        <button type="button" class="btn btn-secondary">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="js/config.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/help.js"></script>
         <script>
             document.getElementById("refresh").addEventListener('click', fetchContacts)
             document.getElementById("addContact").addEventListener('click', addContact)
