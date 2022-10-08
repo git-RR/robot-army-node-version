@@ -58,29 +58,30 @@ helpMenuBtn.addEventListener('click',()=>{
 function reloadHelpModal(){
     helpSubMenu.innerText = "";
     helpModalBody.innerHTML = helpModalMenuHTML;
+    helpModalBody.style.overflow = "hidden";
     const helpView = document.getElementById("helpView");
     const helpAdd = document.getElementById("helpAdd");
     const helpEdit = document.getElementById("helpEdit");
     const helpDelete = document.getElementById("helpDelete");
     helpView.addEventListener('click',async () => {
+        currentPage = 0;
         displayHelp('view');
         await getHelpPage('view');
-        currentPage = 0;
     });
     helpAdd.addEventListener('click', async ()=>{
+        currentPage = 1;
         displayHelp('add');
         await getHelpPage('add');
-        currentPage = 1;
     });
     helpEdit.addEventListener('click', async ()=>{
+        currentPage = 2;
         displayHelp('edit');
         await getHelpPage('edit');
-        currentPage = 2;
     });
     helpDelete.addEventListener('click', async ()=>{
+        currentPage = 3;
         displayHelp('delete');
         await getHelpPage('delete');
-        currentPage = 3;
     });
 }
 
@@ -147,4 +148,6 @@ async function getHelpPage(page){
     }else{
         displayHelp(page);
     }
+    helpModalBody.style.overflow = "auto";
+    // helpModalBody.style.background = "red";
 }

@@ -63,6 +63,17 @@
     max-height: 90vh;
 }
 
-/* #helpModal .modal-dialog .modal-content .modal-body{
-    overflow: auto;
-} */
+/* Custom Styles */
+
+#submitForm,
+#cancelBtn,
+#btnAddContact,
+#btnCancelAdd{
+    width: 50px!important;
+	height: 50px!important;
+}
+
+#cancelBtn,
+#btnCancelAdd{
+    padding-bottom: 3px!important;
+}
